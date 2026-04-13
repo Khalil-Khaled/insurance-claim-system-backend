@@ -114,13 +114,93 @@ Rules:
 Storage Strategy (Initial Version):
 - Local filesystem storage
 - Files stored under:
-/uploads/{claimId}/
+`/uploads/{claimId}/`
 
 Metadata stored in database:
 - original file name
 - stored file path
 - file type
 - associated claim ID
+
+---
+
+## ⚠️ Error Handling Strategy
+
+### 🧭 Overview
+
+The system uses a centralized error handling mechanism to ensure consistent API responses.
+
+All exceptions are handled globally using a dedicated exception handler.
+
+---
+
+### 📦 Error Response Format
+
+All errors follow a unified structure:
+
+```
+{
+  "timestamp": "2026-04-13T10:00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Detailed error message",
+  "path": "/api/v1/claims"
+}
+```
+
+---
+
+### 🧩 Exception Types
+
+The system defines custom exceptions for business logic:
+
+- ResourceNotFoundException
+- BadRequestException
+- UnauthorizedException
+- ForbiddenException
+
+---
+
+### 🛠️ Global Exception Handler
+
+A global handler is implemented using:
+
+- @RestControllerAdvice
+
+Responsibilities:
+- Catch all exceptions
+- Map exceptions to HTTP status codes
+- Return standardized error response
+
+---
+
+### 🔄 Validation Errors
+
+Validation errors (e.g. @Valid) are handled globally:
+
+- Return HTTP 400
+- Include field-level error messages
+
+Example:
+
+```
+{
+  "status": 400,
+  "errors": {
+    "email": "must be a valid email",
+    "password": "must not be empty"
+  }
+}
+```
+
+---
+
+### 🚫 Exception Handling Rules
+
+- No try/catch in controllers (except special cases)
+- Services throw exceptions
+- Global handler manages responses
+- No raw stack traces returned to client
 
 ---
 

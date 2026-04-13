@@ -19,15 +19,19 @@ The API follows REST principles and uses JSON for all requests and responses.
 POST /api/v1/auth/register
 
 Request:
+```
 {
   "email": "string",
   "password": "string"
 }
+```
 
 Response:
+```
 {
   "message": "User registered successfully"
 }
+```
 
 ---
 
@@ -36,16 +40,28 @@ Response:
 POST /api/v1/auth/login
 
 Request:
+```
 {
   "email": "string",
   "password": "string"
 }
+```
 
 Response:
+```
 {
   "token": "jwt-token",
   "role": "ROLE_CLIENT"
 }
+```
+
+Possible errors:
+
+- 401 Unauthorized  
+  Invalid credentials
+
+- 400 Bad Request  
+  Missing or invalid input
 
 ---
 
@@ -58,6 +74,7 @@ GET /api/v1/users
 Authorization: ADMIN only
 
 Response:
+```
 [
   {
     "id": 1,
@@ -65,6 +82,7 @@ Response:
     "role": "ROLE_CLIENT"
   }
 ]
+```
 
 ---
 
@@ -77,13 +95,16 @@ POST /api/v1/contracts
 Authorization: CLIENT / ADMIN
 
 Request:
+```
 {
   "contractType": "AUTO | HOME | HEALTH",
   "startDate": "YYYY-MM-DD",
   "endDate": "YYYY-MM-DD"
 }
+```
 
 Response:
+```
 {
   "id": 1,
   "contractType": "AUTO",
@@ -91,6 +112,15 @@ Response:
   "endDate": "YYYY-MM-DD",
   "userId": 1
 }
+```
+
+Possible errors:
+
+- 400 Bad Request  
+  Invalid dates or input
+
+- 401 Unauthorized  
+  Missing or invalid token
 
 ---
 
@@ -101,6 +131,7 @@ GET /api/v1/contracts/me
 Authorization: CLIENT
 
 Response:
+```
 [
   {
     "id": 1,
@@ -109,6 +140,7 @@ Response:
     "endDate": "YYYY-MM-DD"
   }
 ]
+```
 
 ---
 
@@ -121,18 +153,33 @@ POST /api/v1/claims
 Authorization: CLIENT
 
 Request:
+```
 {
   "contractId": 1,
   "description": "string"
 }
+```
 
 Response:
+```
 {
   "id": 1,
   "reference": "CLM-2026-001",
   "description": "string",
   "status": "CREATED"
 }
+```
+
+Possible errors:
+
+- 404 Not Found  
+  Contract does not exist
+
+- 403 Forbidden  
+  Contract does not belong to user
+
+- 400 Bad Request  
+  Invalid input
 
 ---
 
@@ -143,6 +190,7 @@ GET /api/v1/claims/me
 Authorization: CLIENT
 
 Response:
+```
 [
   {
     "id": 1,
@@ -151,6 +199,7 @@ Response:
     "status": "CREATED"
   }
 ]
+```
 
 ---
 
@@ -161,12 +210,22 @@ GET /api/v1/claims/{id}
 Authorization: CLIENT (own claims) / ADMIN (all)
 
 Response:
+```
 {
   "id": 1,
   "reference": "CLM-2026-001",
   "description": "string",
   "status": "CREATED"
 }
+```
+
+Possible errors:
+
+- 404 Not Found  
+  Claim not found
+
+- 403 Forbidden  
+  Access denied
 
 ---
 
@@ -177,15 +236,30 @@ PUT /api/v1/claims/{id}/status
 Authorization: ADMIN only
 
 Request:
+```
 {
   "status": "IN_PROGRESS | APPROVED | REJECTED"
 }
+```
 
 Response:
+```
 {
   "id": 1,
   "status": "IN_PROGRESS"
 }
+```
+
+Possible errors:
+
+- 403 Forbidden  
+  Not an ADMIN
+
+- 404 Not Found  
+  Claim not found
+
+- 400 Bad Request  
+  Invalid status transition
 
 ---
 
@@ -203,11 +277,24 @@ Request:
 - file: binary file
 
 Response:
+```
 {
   "fileId": 1,
   "fileName": "accident.pdf",
   "fileUrl": "/uploads/{claimId}/accident.pdf"
 }
+```
+
+Possible errors:
+
+- 404 Not Found  
+  Claim not found
+
+- 400 Bad Request  
+  Invalid file (size/type)
+
+- 413 Payload Too Large  
+  File exceeds allowed size
 
 ---
 
@@ -218,6 +305,7 @@ GET /api/v1/claims/{claimId}/documents
 Authorization: CLIENT (own claims) / ADMIN
 
 Response:
+```
 [
   {
     "fileId": 1,
@@ -225,6 +313,7 @@ Response:
     "fileUrl": "/uploads/{claimId}/accident.pdf"
   }
 ]
+```
 
 ---
 

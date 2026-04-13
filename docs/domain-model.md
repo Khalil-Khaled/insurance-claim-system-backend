@@ -81,11 +81,12 @@ Represents a file uploaded for a claim, stored via an abstraction layer.
 ---
 
 ## 🔗 Entity Relationships Summary
-
+```
 User
   └── 1 → N Contracts
           └── 1 → N Claims
                   └── 1 → N Documents
+```
 
 ---
 

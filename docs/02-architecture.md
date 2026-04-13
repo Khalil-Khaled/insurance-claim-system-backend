@@ -32,11 +32,13 @@ Modules:
 
 Each business module follows this structure:
 
+```
 module/
  ├── controller
  ├── service
  ├── repository
  ├── entity
+```
 
 DTOs and mappers are separated (global or per module depending on usage).
 
